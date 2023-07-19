@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GeoLocationApp</title>
+</head>
+<body>
+    <h1>GeoLocationApp</h1>
+    <button onclick="getLocation()">Get Location</button>
+    <p id="latitude"></p>
+    <p id="longitude"></p>
+
+    <script type="text/javascript">
+        function getLocation() {
+            if (navigator.permissions) {
+                navigator.permissions.query({ name: 'geolocation' }).then(function(permissionStatus) {
+                    if (permissionStatus.state === 'granted') {
+                        getCurrentLocation();
+                    } else if (permissionStatus.state === 'prompt') {
+                        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+                    } else if (permissionStatus.state === 'denied') {
+                        alert('Location permission denied. Please allow location access in your device settings.');
+                    }
+                });
+            } else {
+                // For older browsers/devices without the 'permissions' API support
+                navigator.geolocation.getCurrentPosition(onSuccess, onError);
+            }
+        }
+
+        function getCurrentLocation() {
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        }
+
+        function onSuccess(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            document.getElementById("latitude").textContent = "Latitude: " + latitude;
+            document.getElementById("longitude").textContent = "Longitude: " + longitude;
+        }
+
+        function onError(error) {
+            alert('Error occurred. Error code: ' + error.code + ', Message: ' + error.message);
+        }
+    </script>
+</body>
+</html>
